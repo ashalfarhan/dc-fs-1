@@ -4,10 +4,13 @@ import { Image } from './entity/Image.entity'
 import { extname } from 'path'
 import { Buffer } from 'buffer'
 import { uploadMiddleware } from './middlewares/uploadMiddleware'
+import limiter from 'express-rate-limit'
 
 export const createRouter = (connection: Connection) => {
   const router = Router()
   const imagesRepo = connection.getRepository(Image)
+
+  router.use(limiter({ windowMs: 60 * 60 * 100, max: 2 }))
 
   router.post('/images', uploadMiddleware, async (req, res, next) => {
     if (!req.file) {
