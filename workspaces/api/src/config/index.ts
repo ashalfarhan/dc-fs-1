@@ -21,3 +21,5 @@ export function conf(key: keyof typeof configKeys[ENV], override?: string) {
   const env = (process.env.NODE_ENV || 'development') as ENV
   return override ?? configKeys[env][key]
 }
+
+export const isProd = process.env.NODE_ENV === 'production'
