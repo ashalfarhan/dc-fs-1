@@ -1,22 +1,20 @@
 import { Router } from 'express'
 import { Connection } from 'typeorm'
 import { Image } from './entity/Image.entity'
-import multer from 'multer'
 import { extname } from 'path'
 import { Buffer } from 'buffer'
-
-const upload = multer({
-  limits: { fileSize: 1000000 },
-})
+import { uploadMiddleware } from './middlewares/uploadMiddleware'
 
 export const createRouter = (connection: Connection) => {
   const router = Router()
   const imagesRepo = connection.getRepository(Image)
 
-  router.post('/images', upload.single('file'), async (req, res, next) => {
+  router.post('/images', uploadMiddleware, async (req, res, next) => {
     try {
       if (!req.file) {
-        res.sendStatus(400)
+        res.status(400).json({
+          message: 'Please include a file',
+        })
         return
       }
       /**
@@ -47,7 +45,9 @@ export const createRouter = (connection: Connection) => {
     try {
       const result = await imagesRepo.findOne({ where: { fileName: req.params.fileName } })
       if (!result) {
-        res.sendStatus(404)
+        res.status(404).json({
+          message: 'No image found',
+        })
         return
       }
       res.contentType(result.fileType)
@@ -56,5 +56,6 @@ export const createRouter = (connection: Connection) => {
       next('router')
     }
   })
+
   return router
 }
