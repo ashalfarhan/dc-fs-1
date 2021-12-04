@@ -26,7 +26,7 @@ let connectionOptions: Record<string, any> = {
 if (isProd) {
   connectionOptions = {
     ...connectionOptions,
-    url: isProd ? process.env.DATABASE_URL : undefined,
+    url: process.env.DATABASE_URL,
     ssl: {
       rejectUnauthorized: false,
     },
