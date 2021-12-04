@@ -8,6 +8,21 @@ import { Image } from './entity/Image.entity'
 
 const app = express()
 
+const isProd = process.env.NODE_ENV === 'production'
+
+let connectionConfig: Record<string, any> = {
+  username: conf('DB_USER'),
+  password: conf('DB_PASSWORD'),
+  host: 'localhost',
+  port: 5432,
+}
+
+if (isProd) {
+  connectionConfig = {
+    url: process.env.DATABASE_URL,
+  }
+}
+
 let connection: Connection
 
 async function main() {
@@ -17,19 +32,20 @@ async function main() {
   try {
     connection = await createConnection({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: conf('DB_USER'),
-      password: conf('DB_PASSWORD'),
+      // host: 'localhost',
+      // port: 5432,
+      // username: conf('DB_USER'),
+      // password: conf('DB_PASSWORD'),
       database: conf('DB_NAME'),
       entities: [Image],
-      logging: process.env.NODE_ENV === 'production',
-      synchronize: process.env.NODE_ENV !== 'production',
+      logging: isProd,
+      synchronize: !isProd,
+      ...connectionConfig,
     })
 
     app.use('/api', createRouter(connection))
 
-    if (process.env.NODE_ENV === 'production') {
+    if (isProd) {
       app.use(express.static(join(__dirname, '..', 'dist/client')))
     }
 
