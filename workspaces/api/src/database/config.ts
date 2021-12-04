@@ -5,7 +5,7 @@ let databaseOptions: Record<string, any> = {
   username: conf('DB_USER'),
   password: conf('DB_PASSWORD'),
   database: conf('DB_NAME'),
-  host: 'localhost',
+  host: conf('DB_HOST'),
   port: 5432,
   entities: [Image],
   logging: isProd,
@@ -15,7 +15,6 @@ let databaseOptions: Record<string, any> = {
 if (isProd) {
   databaseOptions = {
     ...databaseOptions,
-    url: process.env.DATABASE_URL,
     ssl: {
       rejectUnauthorized: false,
     },
