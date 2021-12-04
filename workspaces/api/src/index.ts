@@ -10,40 +10,36 @@ const app = express()
 
 const isProd = process.env.NODE_ENV === 'production'
 
-let connectionConfig: Record<string, any> = {
+let connection: Connection
+
+let connectionOptions: Record<string, any> = {
   username: conf('DB_USER'),
   password: conf('DB_PASSWORD'),
   database: conf('DB_NAME'),
   host: 'localhost',
   port: 5432,
+  entities: [Image],
+  logging: isProd,
+  synchronize: !isProd,
 }
 
 if (isProd) {
-  connectionConfig = {
-    url: process.env.DATABASE_URL,
+  connectionOptions = {
+    ...connectionOptions,
+    url: isProd ? process.env.DATABASE_URL : undefined,
     ssl: {
       rejectUnauthorized: false,
     },
   }
 }
 
-let connection: Connection
-
 async function main() {
   console.log('Booting up 🚀')
   const port = conf('PORT')
 
   try {
-    connection = await createConnection({
-      type: 'postgres',
-      entities: [Image],
-      logging: isProd,
-      synchronize: !isProd,
-      ...connectionConfig,
-    })
-
+    connection = await createConnection({ ...connectionOptions, type: 'postgres' })
     app.use('/api', createRouter(connection))
-
     if (isProd) {
       app.use(express.static(join(__dirname, '..', 'dist/client')))
     }
