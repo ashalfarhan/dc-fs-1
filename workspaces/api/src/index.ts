@@ -13,6 +13,7 @@ const isProd = process.env.NODE_ENV === 'production'
 let connectionConfig: Record<string, any> = {
   username: conf('DB_USER'),
   password: conf('DB_PASSWORD'),
+  database: conf('DB_NAME'),
   host: 'localhost',
   port: 5432,
 }
@@ -20,6 +21,9 @@ let connectionConfig: Record<string, any> = {
 if (isProd) {
   connectionConfig = {
     url: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   }
 }
 
