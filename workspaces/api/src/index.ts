@@ -36,7 +36,7 @@ async function main() {
       // port: 5432,
       // username: conf('DB_USER'),
       // password: conf('DB_PASSWORD'),
-      database: conf('DB_NAME'),
+      // database: conf('DB_NAME'),
       entities: [Image],
       logging: isProd,
       synchronize: !isProd,
