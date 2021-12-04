@@ -18,21 +18,20 @@ async function main() {
   try {
     connection = await createConnection({ ...databaseOptions, type: 'postgres' })
 
-    app.use('/api', createRouter(connection))
-
     if (isProd) {
       app.use(express.static(join(__dirname, '..', 'dist/client')))
     }
 
+    app.use('/api', createRouter(connection))
+
     app.listen(port, () => {
       console.log('Listening on %s', port)
     })
-
   } catch (error) {
     console.log('Shutting down 🌠')
-    
+
     console.log(error)
-    
+
     connection?.close()
     process.exit(0)
   }

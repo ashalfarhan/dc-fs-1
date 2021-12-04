@@ -10,7 +10,7 @@ export const createRouter = (connection: Connection) => {
   const router = Router()
   const imagesRepo = connection.getRepository(Image)
 
-  router.use(limiter({ windowMs: 60 * 60 * 100, max: 2 }))
+  router.use(limiter({ windowMs: 60 * 60 * 100 }))
 
   router.post('/images', uploadMiddleware, async (req, res, next) => {
     if (!req.file) {
