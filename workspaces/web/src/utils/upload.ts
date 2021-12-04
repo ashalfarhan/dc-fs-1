@@ -1,4 +1,4 @@
-export function upload(form: FormData) {
+export async function upload(form: FormData) {
   return fetch('/api/images', {
     body: form,
     method: 'POST',
