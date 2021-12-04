@@ -40,7 +40,7 @@ export const createRouter = (connection: Connection) => {
         .save()
       res.json({ fileName, fileType, createdAt, id })
     } catch (error) {
-      next('router')
+      next(error)
     }
   })
 
@@ -56,7 +56,7 @@ export const createRouter = (connection: Connection) => {
       res.contentType(result.fileType)
       res.send(Buffer.from(result.base64Str, 'base64'))
     } catch (error) {
-      next('router')
+      next(error)
     }
   })
 
