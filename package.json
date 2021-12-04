@@ -1,0 +1,14 @@
+{
+  "name": "img-uploader",
+  "version": "1.0.0",
+  "author": "ashalfarhan",
+  "workspaces": [
+    "workspaces/**"
+  ],
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "api": "yarn workspace api",
+    "web": "yarn workspace web"
+  }
+}
