@@ -9,6 +9,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "api": "yarn workspace api",
-    "web": "yarn workspace web"
+    "web": "yarn workspace web",
+    "start": "yarn api start",
+    "build": "yarn api build && yarn web build"
   }
 }
