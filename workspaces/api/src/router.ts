@@ -10,13 +10,13 @@ export const createRouter = (connection: Connection) => {
   const imagesRepo = connection.getRepository(Image)
 
   router.post('/images', uploadMiddleware, async (req, res, next) => {
+    if (!req.file) {
+      res.status(400).json({
+        message: 'Please include a file',
+      })
+      return
+    }
     try {
-      if (!req.file) {
-        res.status(400).json({
-          message: 'Please include a file',
-        })
-        return
-      }
       /**
        * Saving to local directory
        */

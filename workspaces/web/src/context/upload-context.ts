@@ -1,5 +1,5 @@
 import { createContext, Dispatch, useContext } from 'react'
-import { UploadAction, UploadState } from './reducer'
+import { UploadAction, UploadState } from './types'
 
 export const UploadContext = createContext<UploadContextValues | undefined>(undefined)
 
